@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { select, NgRedux } from '@angular-redux/store';
 import { IAppState, Note } from 'src/app/store';
 import { GET_NOTES, EDIT_NOTE } from 'src/app/action.type.constant';
-import { UtilityService } from 'src/common/services/utility.service';
+import { UtilityService } from 'src/shared/services/utility.service';
 
 declare let moment;
 
@@ -12,8 +12,10 @@ declare let moment;
   styleUrls: ['./sidebar.component.less']
 })
 export class SidebarComponent implements OnInit, OnChanges {
-  //@select() notes;
+  
   notes: Array<Note>;
+
+  @select() searchQuery: string;
 
   constructor(
     private utilityService: UtilityService,

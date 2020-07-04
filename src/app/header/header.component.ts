@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { IAppState } from '../store';
-import { SAVE_NOTE } from '../action.type.constant';
+import { SAVE_NOTE, DELETE_NOTE, SEARCH_NOTE } from '../action.type.constant';
 import { MainService } from '../main/services/main.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { MainService } from '../main/services/main.service';
   styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit {
+  searchQuery: string = '';
 
   constructor(
     private mainService: MainService,
@@ -20,7 +21,17 @@ export class HeaderComponent implements OnInit {
 
   saveNote() {
     this.mainService.noteClear.next(true);
-    this.ngRedux.dispatch({type: SAVE_NOTE});
+    this.ngRedux.dispatch({ type: SAVE_NOTE });
+  }
+
+  deleteNote() {
+    this.mainService.noteClear.next(true);
+    this.ngRedux.dispatch({ type: DELETE_NOTE });
+  }
+
+  searchNote() {
+    this.mainService.noteClear.next(true);
+    this.ngRedux.dispatch({ type: SEARCH_NOTE, payload: this.searchQuery.trim() });
   }
 
 }

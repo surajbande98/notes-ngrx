@@ -12,20 +12,20 @@
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
         <a class="nav-link" href="javascript:void(0)">
-          <span title="Delete note" class="icon trash-icon"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+          <span (click)="deleteNote()" title="Delete note" class="icon trash-icon"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="javascript:void(0)">
-          <span title="Save note" class="icon edit-icon">
-            <i (click)="saveNote()" class="fa fa-edit" aria-hidden="true"></i></span>
+          <span (click)="saveNote()" title="Save note" class="icon edit-icon">
+            <i class="fa fa-edit" aria-hidden="true"></i></span>
         </a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <div class="input-group">
         <i class="fa fa-search"></i>
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input (keyup)="searchNote()" [(ngModel)]="searchQuery" name="InputSearch" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       </div>
      
     </form>

@@ -14,6 +14,7 @@ import { NoteComponent } from './main/components/note/note.component';
 import { IAppState, rootReducer, INITIAL_STATE } from './store';
 import { createLogger } from 'redux-logger'
 import { MainService } from './main/services/main.service';
+import { SharedModule } from 'src/shared/shared.module';
 
 const logger = createLogger({
   // ...options
@@ -33,6 +34,7 @@ const logger = createLogger({
     AppRoutingModule,
     FormsModule,
     NgReduxModule,
+    SharedModule
   ],
   providers: [MainService],
   bootstrap: [AppComponent]

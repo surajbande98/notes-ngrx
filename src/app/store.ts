@@ -1,5 +1,4 @@
-import { ADD_NOTE, SHOW_NOTE, SAVE_NOTE, GET_NOTES, EDIT_NOTE } from './action.type.constant';
-import { stat } from 'fs';
+import { SHOW_NOTE, SAVE_NOTE, GET_NOTES, EDIT_NOTE, DELETE_NOTE, SEARCH_NOTE } from './action.type.constant';
 
 export interface Note {
     id: number;
@@ -12,13 +11,17 @@ export interface Note {
 
 export interface IAppState {
     currentNote: Note;
+    originalNotes: Note[];
     notes: Note[];
+    searchQuery: string
     lastUpdate: Date;
 }
 
 export const INITIAL_STATE: IAppState = {
     currentNote: null,
     notes: [],
+    originalNotes: [],
+    searchQuery:'',
     lastUpdate: null
 };
 
@@ -26,7 +29,7 @@ export const rootReducer = (state: IAppState, action): IAppState => {
     switch (action.type) {
         case SHOW_NOTE:
 
-            if (state.notes.length && state.currentNote) {
+            if (state.notes.length > 1) {
 
                 let notesCopy = [...state.notes];
 
@@ -49,84 +52,45 @@ export const rootReducer = (state: IAppState, action): IAppState => {
                         lastUpdate: new Date()
                     }
                 }
-                // else {
-                //     // Add new one
-                //     action.payload.id = state.notes.length + 1;
-
-                //     let notesCopy = [...state.notes];
-
-                //     notesCopy = notesCopy.splice(1, 0, action.payload);
-
-                //     //const notesCopy = state.notes.concat(Object.assign({}, action.payload));
-
-                //     localStorage.setItem('NOTES', JSON.stringify(notesCopy));
-
-                //     return Object.assign({}, state, {
-                //         notes: notesCopy,
-                //         currentNote: null,
-                //         lastUpdate: new Date()
-                //     });
-                // }
-
 
             } else {
                 // Add new one
 
                 let notesCopy = [...state.notes];
 
-                // if (state.currentNote) {
-                //     const fetchedNote = notesCopy.findIndex(ben => (ben.id == action.payload.id));
-
-                //     if (fetchedNote > -1) {
-                //         notesCopy[fetchedNote] = action.payload;
-
-                //         localStorage.setItem('NOTES', JSON.stringify(notesCopy));
-
-                //         return {
-                //             ...state,
-                //             notes: notesCopy,
-                //             currentNote: null,
-                //             lastUpdate: new Date()
-                //         }
-                //     }
-                // } 
-                // else {
-                //action.payload = { ...action.payload.id };
-
                 notesCopy[0] = action.payload;
-                //notesCopy.splice(1, 0, action.payload);
+
+                notesCopy[0].isDefault = true;
 
                 localStorage.setItem('NOTES', JSON.stringify(notesCopy));
 
                 return Object.assign({}, state, {
                     notes: notesCopy,
+                    originalNotes: notesCopy,
                     currentNote: null,
                     lastUpdate: new Date()
                 });
-                //}
-
             }
 
         case EDIT_NOTE:
 
             let notesCopy = [...state.notes];
 
-            notesCopy = notesCopy.map(item => {
-                var temp = Object.assign({}, item);
-                if (temp.isSelected) {
-                    temp.isSelected = false;
-                }
-                return temp;
+            notesCopy = notesCopy.map(note => {
+                return {
+                    ...note,
+                    isSelected: false
+                };
             });
 
             let noteFound = notesCopy.findIndex(note => note.id == action.payload.id);
 
             if (noteFound > -1) notesCopy[noteFound].isSelected = true;
 
-            console.log(notesCopy);
             return {
                 ...state,
                 notes: notesCopy,
+                originalNotes: notesCopy,
                 currentNote: action.payload,
                 lastUpdate: new Date()
             }
@@ -144,6 +108,17 @@ export const rootReducer = (state: IAppState, action): IAppState => {
             let notes = [...state.notes];
 
 
+            let isDummyNote;
+
+            if (notes.length == 1) {
+                isDummyNote = notes.find(note => note.isDefault);
+            }
+
+            if (isDummyNote && isDummyNote.isDefault) {
+                notes.map(x => (x.isDefault == true) ? x.isDefault = false : x);
+                notes.splice(0, 0, note);
+            }
+
             if (notes.length >= 0 && state.currentNote && notes[0].id == state.currentNote.id) {
                 notes.map(x => (x.isDefault == true) ? x.isDefault = false : x);
                 notes.splice(0, 0, note);
@@ -157,6 +132,7 @@ export const rootReducer = (state: IAppState, action): IAppState => {
             return {
                 ...state,
                 notes: notes,
+                originalNotes: notes,
                 currentNote: null
             }
 
@@ -192,12 +168,63 @@ export const rootReducer = (state: IAppState, action): IAppState => {
 
             return {
                 ...state,
-                notes: notesInStorage
+                notes: notesInStorage,
+                originalNotes: notesInStorage
             };
+
+        case DELETE_NOTE:
+            let clonedNotes = [...state.notes];
+
+            if (state.currentNote && clonedNotes.length) {
+
+                clonedNotes = clonedNotes.filter(note => note.id != state.currentNote.id)
+
+                localStorage.setItem('NOTES', JSON.stringify(clonedNotes));
+
+            }
+
+            if (!clonedNotes.length) {
+                clonedNotes.unshift({
+                    id: new Date().getTime(),
+                    title: 'New Title',
+                    text: 'No additional t...', // 15 chars
+                    createdDate: new Date(),
+                    isSelected: false,
+                    isDefault: true
+                });
+            }
+
+            return {
+                ...state,
+                notes: clonedNotes,
+                originalNotes: clonedNotes,
+                currentNote: null,
+                lastUpdate: new Date()
+            }
+
+        case SEARCH_NOTE:
+
+            let notesToDelete = [...state.originalNotes];
+
+            // filter for given search string
+            notesToDelete = notesToDelete.filter(
+                note => note.title.toLowerCase().indexOf(action.payload.toLowerCase()) > -1
+            );
+
+            return {
+                ...state,
+                notes: notesToDelete,
+                currentNote: null,
+                searchQuery: action.payload,
+                lastUpdate: new Date()
+            }
 
         default:
             return state;
-
     }
 
 }
+
+// selectors
+
+
