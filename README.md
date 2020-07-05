@@ -1,4 +1,4 @@
-# NotesApp
+# Note taking application
 This SPA offers add new note, search, edit and delete functionalities.
 
 ## Development server
