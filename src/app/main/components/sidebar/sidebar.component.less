@@ -10,18 +10,28 @@
   transition: 0.1s;
   overflow: auto;
   color: #373735;
-  font-weight: 600;
+  font-weight: 767;
+  .no-notes {
+    padding: 12px;
+    font-size: 13px;
+    font-style: italic;
+    color: grey;
+
+  }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 767px) {
   .sidebar {
-    top: 211px !important;
-    width: 250px;
+    top: 62px;
+    width: 170px;
+  }
+  .sidebar a {
+    padding: 15px 8px 1px 13px !important;
   }
 }
 
 .sidebar a {
-  padding: 16px 8px 16px 32px;
+  padding: 18px 8px 10px 30px;
   text-decoration: none;
   font-size: 20px;
   color: #343331;
@@ -43,8 +53,15 @@
 
 .sidebar .closebtn {
   position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
+  top: -23px;
+  right: 5px;
+  font-size: 31px;
   margin-left: 50px;
+}
+
+.openBtn {
+  text-decoration: none;
+  color: #343331;
+  margin-left: 10px;
+  font-size: 34px;
 }

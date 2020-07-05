@@ -1,14 +1,18 @@
+<a href="javascript:void(0)" class="openBtn" (click)="openSidebar()">
+  <i class="fa fa-plus-square"></i>
+</a>
 <div id="mySidebar" class="sidebar">
-  <!-- <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a> -->
+  <a href="javascript:void(0)" class="closebtn" (click)="closeSidebar()">×</a>
 
   <a *ngFor="let note of notes" (click)="selectNote(note)" [class.active]="note.isSelected">
     <span class="title" title="{{truncateTitle(note.title)}}"
     [innerHTML]="truncateTitle(note.title)"
     > </span>
     <div class="create-time">
-      <span> {{getTime(note.createdDate)}}</span>
+      <span> {{note.createdDate | dateFormatter:'hh:mm'}}</span>
       <span>{{note.text}}</span>
     </div>
   </a>
+  <div class="no-notes" *ngIf="notes.length==0">No notes found</div>
 
 </div>

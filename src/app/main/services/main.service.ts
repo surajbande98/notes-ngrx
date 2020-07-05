@@ -8,5 +8,7 @@ export class MainService {
 
   noteClear = new Subject<boolean>();
 
+  openSidebar = new Subject<boolean>();
+
   constructor() { }
 }

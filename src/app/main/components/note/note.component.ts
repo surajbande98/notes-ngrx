@@ -1,10 +1,9 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { IAppState, Note } from 'src/app/store';
-import { NgRedux, select } from '@angular-redux/store';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { NgRedux } from '@angular-redux/store';
 import { SHOW_NOTE } from 'src/app/action.type.constant';
 import { MainService } from '../../services/main.service';
-
-declare var moment;
+import { Note } from 'src/app/store/note.interface';
+import { IAppState } from 'src/app/store/app-state.interface';
 
 @Component({
   selector: 'app-note',
@@ -14,7 +13,7 @@ declare var moment;
 export class NoteComponent implements OnInit {
 
   now: any;
-  
+
   note: Note = {
     id: new Date().getTime(),
     title: 'New Note',
@@ -24,6 +23,8 @@ export class NoteComponent implements OnInit {
   }
 
   isNoteSelected: boolean = false;
+
+  @ViewChild('inputNote') searchElement: ElementRef;
 
   constructor(
     private mainService: MainService,
@@ -36,9 +37,22 @@ export class NoteComponent implements OnInit {
           this.note = note;
           this.note.isSelected = true;
         } else {
-          this.note.title = '';
+          //this.note.title = '';
         }
+
+        this.focusTheInput();
       });
+  }
+
+  /**
+   * Focuses the input area
+   * @param 
+   * @returns void
+   */
+  focusTheInput() {
+    setTimeout(() => {
+      this.searchElement.nativeElement.focus();
+    }, 1);
   }
 
   ngOnInit() {
@@ -53,6 +67,11 @@ export class NoteComponent implements OnInit {
     this.getAuthTimeStamp();
   }
 
+  /**
+  * Creates default note
+  * @param 
+  * @returns void
+  */
   initializeDefaultNote() {
     this.note = {
       id: new Date().getTime(),
@@ -63,10 +82,20 @@ export class NoteComponent implements OnInit {
     }
   }
 
+  /**
+  * dispactches action
+  * @param 
+  * @returns void
+  */
   addNote() {
     this.ngRedux.dispatch({ type: SHOW_NOTE, payload: this.note });
   }
 
+   /**
+  * Gives current time stamp string
+  * @param 
+  * @returns void
+  */
   getAuthTimeStamp() {
     return setInterval(() => {
       this.now = Date.now();

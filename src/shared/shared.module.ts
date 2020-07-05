@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UtilityService } from './services/utility.service';
 import { HighlightTextPipe } from './pipes/highlight-text.pipe';
+import { DateFormatterPipe } from './pipes/date-formatter.pipe';
 
 @NgModule({
   declarations: [
-    HighlightTextPipe
+    HighlightTextPipe,
+    DateFormatterPipe
   ],
   exports: [
-    HighlightTextPipe
+    HighlightTextPipe,
+    DateFormatterPipe
   ],
   imports: [
     CommonModule
