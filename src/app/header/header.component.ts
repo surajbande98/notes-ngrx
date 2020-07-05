@@ -39,4 +39,9 @@ export class HeaderComponent implements OnInit {
     this.ngRedux.dispatch({ type: SEARCH_NOTE, payload: this.searchQuery.trim() });
   }
 
+  clearQuery() {
+    this.searchQuery = '';
+    this.searchNote();
+  }
+
 }
