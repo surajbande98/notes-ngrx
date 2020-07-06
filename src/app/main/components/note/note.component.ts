@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
+import { NgRedux, select } from '@angular-redux/store';
 import { SHOW_NOTE } from 'src/app/action.type.constant';
 import { MainService } from '../../services/main.service';
 import { Note } from 'src/app/store/note.interface';
@@ -24,6 +24,8 @@ export class NoteComponent implements OnInit {
 
   isNoteSelected: boolean = false;
 
+  lastUpdate: string;
+
   @ViewChild('inputNote') searchElement: ElementRef;
 
   constructor(
@@ -41,6 +43,12 @@ export class NoteComponent implements OnInit {
         }
 
         this.focusTheInput();
+      });
+    
+      this.ngRedux
+      .select('lastUpdate')
+      .subscribe((date: string) => {
+        this.lastUpdate = date;
       });
   }
 

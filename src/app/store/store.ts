@@ -13,7 +13,7 @@ export const INITIAL_STATE: IAppState = {
     notes: [],
     originalNotes: [],
     searchQuery: '',
-    lastUpdate: null
+    lastUpdate: new Date()
 };
 
 //Redux selector

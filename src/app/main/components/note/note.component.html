@@ -1,6 +1,6 @@
 <div class="note-area" id="NoteArea">
 
-  <div class="timestamp">{{now | date:'MMM d, y, h:mm a'}}</div>
+  <div class="timestamp">{{lastUpdate | date:'MMM d, y, h:mm a'}}</div>
   <textarea #inputNote [(ngModel)]="note.title" (keyup)="addNote()"></textarea>
 
 </div>
