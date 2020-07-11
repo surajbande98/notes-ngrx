@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
-import { SAVE_NOTE, DELETE_NOTE, SEARCH_NOTE } from '../action.type.constant';
+import { NoteSave, NoteDelete, NoteSearch } from '../store/actions/notes.actions';
 import { MainService } from '../main/services/main.service';
 import { IAppState } from '../store/app-state.interface';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'notes-header',
@@ -11,32 +11,34 @@ import { IAppState } from '../store/app-state.interface';
 })
 export class HeaderComponent implements OnInit {
   searchQuery: string = '';
+  enteredNote: string;
 
   constructor(
-    private mainService: MainService,
-    private ngRedux: NgRedux<IAppState>) { }
+    private store: Store<IAppState>,
+    private mainService: MainService) {
+    store.pipe(select('notes')).subscribe((data: any) => {
+      this.enteredNote = data.selectedNote ? data.selectedNote.text : '';
+    });
+  }
 
   ngOnInit() {
   }
 
   saveNote() {
-    this.mainService.noteClear.next(true);
     this.mainService.openSidebar.next(true);
     this.searchQuery = '';
-    this.ngRedux.dispatch({ type: SAVE_NOTE });
+    this.store.dispatch(new NoteSave(null));
   }
 
-  deleteNote() {
-    this.mainService.noteClear.next(true);
+  removeNote() {
     this.mainService.openSidebar.next(true);
-    this.searchQuery = '';
-    this.ngRedux.dispatch({ type: DELETE_NOTE });
+    this.store.dispatch(new NoteDelete(null));
   }
 
   searchNote() {
-    this.mainService.noteClear.next(true);
+    //.mainService.noteClear.next(true);
     this.mainService.openSidebar.next(true);
-    this.ngRedux.dispatch({ type: SEARCH_NOTE, payload: this.searchQuery.trim() });
+    this.store.dispatch(new NoteSearch(this.searchQuery.trim()));
   }
 
   clearQuery() {

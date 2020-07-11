@@ -142,5 +142,8 @@
       }
     }
   },
-  "defaultProject": "notes-app"
+  "defaultProject": "notes-app",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

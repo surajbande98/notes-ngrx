@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgRedux, select } from '@angular-redux/store';
-import { SHOW_NOTE } from 'src/app/action.type.constant';
-import { MainService } from '../../services/main.service';
-import { Note } from 'src/app/store/note.interface';
+
+import { Note } from '../../models/note';
+import { NoteAdd } from 'src/app/store/actions/notes.actions';
+import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/store/app-state.interface';
 
 @Component({
@@ -12,44 +12,34 @@ import { IAppState } from 'src/app/store/app-state.interface';
 })
 export class NoteComponent implements OnInit {
 
-  now: any;
+  now: any = new Date();
 
-  note: Note = {
-    id: new Date().getTime(),
-    title: 'New Note',
-    text: 'No additional t...', // 15 chars
-    createdDate: new Date(),
-    isSelected: false
-  }
+  selectedNote: Note;
+
+  notes: Note[];
 
   isNoteSelected: boolean = false;
 
   lastUpdate: string;
 
-  @ViewChild('inputNote') searchElement: ElementRef;
+  @ViewChild('inputNote') inputNote: ElementRef;
+
+  enteredNote: string;
+
+  searchString: string;
 
   constructor(
-    private mainService: MainService,
-    private ngRedux: NgRedux<IAppState>) {
-    this.ngRedux
-      .select('currentNote')
-      .subscribe((note: Note) => {
-        note ? this.isNoteSelected = true : this.isNoteSelected = false;
-        if (this.isNoteSelected) {
-          this.note = note;
-          this.note.isSelected = true;
-        } else {
-          //this.note.title = '';
-        }
+    private store: Store<IAppState>) {
+    store.pipe(select('notes')).subscribe((data: any) => {
+      this.selectedNote = data.selectedNote;
+      this.enteredNote = data.selectedNote ? data.selectedNote.text : '';
+      this.searchString = data.searchQuery;
+      this.notes = data.notes;
 
+      if(!this.searchString && this.selectedNote) {
         this.focusTheInput();
-      });
-    
-      this.ngRedux
-      .select('lastUpdate')
-      .subscribe((date: string) => {
-        this.lastUpdate = date;
-      });
+      }
+    });
   }
 
   /**
@@ -59,35 +49,15 @@ export class NoteComponent implements OnInit {
    */
   focusTheInput() {
     setTimeout(() => {
-      this.searchElement.nativeElement.focus();
+      this.inputNote.nativeElement.focus();
     }, 1);
   }
 
   ngOnInit() {
-    this.mainService.noteClear.subscribe(
-      (isClear: boolean) => {
-        if (isClear) {
-          this.initializeDefaultNote()
-        }
-      }
-    );
-
-    this.getAuthTimeStamp();
-  }
-
-  /**
-  * Creates default note
-  * @param 
-  * @returns void
-  */
-  initializeDefaultNote() {
-    this.note = {
-      id: new Date().getTime(),
-      title: '',
-      text: 'No additional t...', // 15 chars
-      createdDate: new Date(),
-      isSelected: false
+    if(!this.searchString) {
+      this.focusTheInput();
     }
+    this.getAuthTimeStamp();
   }
 
   /**
@@ -96,14 +66,27 @@ export class NoteComponent implements OnInit {
   * @returns void
   */
   addNote() {
-    this.ngRedux.dispatch({ type: SHOW_NOTE, payload: this.note });
+
+    const note = new Note();
+
+    note.id = this.selectedNote ? this.selectedNote.id : new Date().getTime();
+
+    note.text = this.enteredNote.trim();
+
+    note.title = '';
+
+    note.isSelected = this.selectedNote ? this.selectedNote.isSelected : false;
+
+    note.createdDate = new Date().toString();
+
+    this.store.dispatch(new NoteAdd(note));
   }
 
-   /**
-  * Gives current time stamp string
-  * @param 
-  * @returns void
-  */
+  /**
+ * Gives current time stamp string
+ * @param 
+ * @returns void
+ */
   getAuthTimeStamp() {
     return setInterval(() => {
       this.now = Date.now();

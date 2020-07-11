@@ -1,14 +1,13 @@
 import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { select, NgRedux } from '@angular-redux/store';
-import { GET_NOTES, EDIT_NOTE } from 'src/app/action.type.constant';
+import { NoteFetch, NoteSelect } from 'src/app/store/actions/notes.actions';
 import { UtilityService } from 'src/shared/services/utility.service';
 import { Observable, Subscription } from 'rxjs';
-import { Note } from 'src/app/store/note.interface';
 
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MainService } from '../../services/main.service';
-
-declare let moment;
+import { Note } from '../../models/note';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/store/app-state.interface';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,39 +17,25 @@ declare let moment;
 export class SidebarComponent implements OnInit, OnDestroy {
 
   // Selects an observable from the store, and attaches it to the decorated property.
-  @select() searchQuery: Observable<string>;
-
-  notes: Array<Note>;
+  notes: Note[];
 
   isMobileScreenDetected: boolean = false;
 
   openSidebarSubscription: Subscription;
 
   constructor(
+    private store: Store<IAppState>,
     public breakpointObserver: BreakpointObserver,
     private utilityService: UtilityService,
-    private mainService: MainService,
-    private ngRedux: NgRedux<any>) {
+    private mainService: MainService) {
 
-    //Select a slice of state to expose as an observable.
-    this.ngRedux
-      .select<Array<Note>>('notes')
-      .subscribe((items: Array<Note>) => {
-        this.notes = items;
-      });
-
-    //Select a slice of state to expose as an observable.
-    this.ngRedux
-      .select<string>('searchQuery')
-      .subscribe((item: string) => {
-        if (item) {
-          this.openSidebar();
-        }
-      });
+    store.pipe(select('notes')).subscribe((data: any) => {
+      this.notes = data.notes;
+    });
   }
 
   ngOnInit() {
-    this.ngRedux.dispatch({ type: GET_NOTES });
+    this.store.dispatch(new NoteFetch('NOTES'));
 
     // Check for mobile devices screen resolution
     if (this.breakpointObserver.isMatched('(max-width: 767px)')) {
@@ -76,7 +61,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @returns void
    */
   selectNote(note: Note): void {
-    this.ngRedux.dispatch({ type: EDIT_NOTE, payload: note });
+    this.store.dispatch(new NoteSelect(note));
   }
 
   /**
@@ -85,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @returns string
    */
   truncateTitle(title: string): string {
-    return title ? this.utilityService.truncateText(title, 15, '...') : 'No Title';
+    return title ? this.utilityService.truncateText(title, 15, '...') : '';
   }
 
   /**

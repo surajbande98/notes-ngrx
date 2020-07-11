@@ -1,7 +1,7 @@
-import { Note } from './note.interface';
+import { Note } from '../main/models/note';
 
 export interface IAppState {
-    currentNote: Note;
+    selectedNote: Note;
     originalNotes: Note[];
     notes: Note[];
     searchQuery: string
