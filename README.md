@@ -3,6 +3,11 @@ This SPA offers add new note, search, edit and delete functionalities.
 
 Steps to run
 
+Using Domain URL
+https://note-ngrx.herokuapp.com/
+
+OR
+
 1. Clone the repository
 2. Run Sudo npm install in the project folder
 3. ng serve to run the dev server
