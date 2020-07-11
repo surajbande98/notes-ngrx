@@ -9,6 +9,6 @@ export class AppComponent {
   title = 'Notes Taker';
   
   constructor() {
-    localStorage.clear();
+    //localStorage.clear();
   }
 }
