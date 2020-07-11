@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NoteSave, NoteDelete, NoteSearch } from '../store/actions/notes.actions';
-import { MainService } from '../main/services/main.service';
+import { NoteService } from '../main/services/note.service';
 import { IAppState } from '../store/app-state.interface';
 import { Store, select } from '@ngrx/store';
 
@@ -15,7 +15,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private store: Store<IAppState>,
-    private mainService: MainService) {
+    private noteService: NoteService) {
+    // Subscribe to store
     store.pipe(select('notes')).subscribe((data: any) => {
       this.enteredNote = data.selectedNote ? data.selectedNote.text : '';
     });
@@ -25,19 +26,20 @@ export class HeaderComponent implements OnInit {
   }
 
   saveNote() {
-    this.mainService.openSidebar.next(true);
+    this.noteService.focusInput.next(true);
+    this.noteService.openSidebar.next(true);
     this.searchQuery = '';
     this.store.dispatch(new NoteSave(null));
   }
 
   removeNote() {
-    this.mainService.openSidebar.next(true);
+    this.noteService.focusInput.next(true);
+    this.noteService.openSidebar.next(true);
     this.store.dispatch(new NoteDelete(null));
   }
 
   searchNote() {
-    //.mainService.noteClear.next(true);
-    this.mainService.openSidebar.next(true);
+    this.noteService.openSidebar.next(true);
     this.store.dispatch(new NoteSearch(this.searchQuery.trim()));
   }
 

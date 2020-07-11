@@ -4,9 +4,11 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class MainService {
+export class NoteService {
 
   openSidebar = new Subject<boolean>();
+
+  focusInput = new Subject<boolean>();
 
   constructor() { }
 }

@@ -1,68 +1,76 @@
-.sidebar {
-  height: 100%;
-  width: 350px;
-  position: fixed;
-  z-index: 1;
-  top: 62px;
-  left: 0;
-  background-color: #fafaf7;
-  overflow-x: hidden;
-  transition: 0.1s;
-  overflow: auto;
-  color: #373735;
-  font-weight: 767;
-  
-  .no-notes {
-    padding: 12px;
-    font-size: 13px;
-    font-style: italic;
-    color: grey;
-
+.sidebar-wrapper {
+  .openBtn {
+    text-decoration: none;
+    color: #343331;
+    margin-left: 10px;
+    font-size: 34px;
   }
+
+  .sidebar {
+    height: 100%;
+    width: 350px;
+    position: fixed;
+    z-index: 1;
+    top: 62px;
+    left: 0;
+    background-color: #fafaf7;
+    overflow-x: hidden;
+    transition: 0.1s;
+    overflow: auto;
+    color: #373735;
+    font-weight: 767;
+    border-right: 2px solid #ececec;
+    word-break: break-all;
+
+    a {
+      padding: 18px 8px 10px 30px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #343331;
+      display: block;
+      transition: 0.1s;
+      cursor: pointer;
+
+      .create-time {
+        font-size: 13px;
+        font-weight: normal;
+
+        span:nth-child(2) {
+          margin-left: 4px;
+        }
+      }
+    }
+
+    a.active {
+      background: #FBE598;
+    }
+
+    .no-notes {
+      padding: 12px;
+      font-size: 13px;
+      font-style: italic;
+      color: grey;
+
+    }
+
+    .closebtn {
+      position: absolute;
+      top: -23px;
+      right: 5px;
+      font-size: 31px;
+      margin-left: 50px;
+    }
+  }
+
 }
 
 @media only screen and (max-width: 767px) {
   .sidebar {
     top: 62px;
-    width: 170px;
+    width: 169px;
   }
+
   .sidebar a {
     padding: 15px 8px 1px 13px !important;
   }
-}
-
-.sidebar a {
-  padding: 18px 8px 10px 30px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #343331;
-  display: block;
-  transition: 0.1s;
-  cursor: pointer;
-  .create-time {
-    font-size: 13px;
-    font-weight: normal;
-    span:nth-child(2) {
-      margin-left: 4px;
-    }
-  }
-}
-
-.sidebar a.active {
-  background: #FBE598;
-}
-
-.sidebar .closebtn {
-  position: absolute;
-  top: -23px;
-  right: 5px;
-  font-size: 31px;
-  margin-left: 50px;
-}
-
-.openBtn {
-  text-decoration: none;
-  color: #343331;
-  margin-left: 10px;
-  font-size: 34px;
 }

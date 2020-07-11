@@ -1,15 +1,18 @@
-<a href="javascript:void(0)" class="openBtn" (click)="openSidebar()">
-  <i class="fa fa-plus-square"></i>
-</a>
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" (click)="closeSidebar()">×</a>
-
-  <a *ngFor="let note of notes" (click)="selectNote(note)" [class.active]="note.isSelected">
-    <span class="title" title="{{truncateTitle(note.text)}}" [innerHTML]="truncateTitle(note.text)"> </span>
-    <div class="create-time">
-      <span> {{note.createdDate | dateFormatter:'hh:mm'}}</span>
-      <span>{{note.text}}</span>
-    </div>
+<div class="sidebar-wrapper">
+  <a href="javascript:void(0)" class="openBtn" (click)="openSidebar()">
+    <i class="fa fa-plus-square"></i>
   </a>
-
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" (click)="closeSidebar()">×</a>
+  
+    <a *ngFor="let note of notes" (click)="selectNote(note)" [class.active]="note.isSelected">
+      <span class="title" title="{{note.text}}" [innerHTML]="truncateTitle(note.text)"> </span>
+      <div class="create-time">
+        <span> {{note.createdDate | dateFormatter:'hh:mm A'}}</span>
+        <span>{{note.text}}</span>
+      </div>
+    </a>
+  
+  </div>
 </div>
+

@@ -1,7 +1,6 @@
-.note-area {
+.note-wrapper {
     margin-left: 350px;
-    padding: 6px 12px;
-   // border-left: 2px solid #EDEDEC;
+    background: #FCFCF5;
 
     .timestamp {
         text-align: center;
@@ -16,6 +15,10 @@
         width: 100%;
         border: none;
         color: #6A6A68;
+        background: #FCFCF5;
+        border: 2px solid #ececec;
+        border-left: none;
+        padding: 6px;
 
         &:focus {
             outline: none;
@@ -24,7 +27,7 @@
 }
 
 @media only screen and (max-width: 767px) {
-    .note-area {
+    .note-wrapper {
         margin-left: 200px;
     }
 }

@@ -10,12 +10,11 @@ import { SharedModule } from 'src/shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { SidebarComponent } from './main/components/sidebar/sidebar.component';
 import { NoteComponent } from './main/components/note/note.component';
 
-import { MainService } from './main/services/main.service';
+import { NoteService } from './main/services/note.service';
 
 import { StoreModule } from '@ngrx/store';
 
@@ -26,7 +25,6 @@ import { environment } from 'src/environments/environment';
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent,
     MainComponent,
     SidebarComponent,
     NoteComponent
@@ -44,7 +42,7 @@ import { environment } from 'src/environments/environment';
     LayoutModule,
     SharedModule
   ],
-  providers: [MainService],
+  providers: [NoteService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

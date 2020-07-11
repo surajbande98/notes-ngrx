@@ -1,16 +1,16 @@
-import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NoteFetch, NoteSelect } from 'src/app/store/actions/notes.actions';
 import { UtilityService } from 'src/shared/services/utility.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MainService } from '../../services/main.service';
+import { NoteService } from '../../services/note.service';
 import { Note } from '../../models/note';
 import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/store/app-state.interface';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'notes-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.less']
 })
@@ -27,8 +27,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private store: Store<IAppState>,
     public breakpointObserver: BreakpointObserver,
     private utilityService: UtilityService,
-    private mainService: MainService) {
+    private mainService: NoteService) {
 
+    // Subscribe to store
     store.pipe(select('notes')).subscribe((data: any) => {
       this.notes = data.notes;
     });
@@ -93,8 +94,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     let notesAreaMLeft = '350px';
 
     if (this.isMobileScreenDetected) {
-      sidebarWidth = '170px';
-      notesAreaMLeft = '200px';
+      sidebarWidth = '140px';
+      notesAreaMLeft = '140px';
     }
 
     document.getElementById("mySidebar").style.width = sidebarWidth;
