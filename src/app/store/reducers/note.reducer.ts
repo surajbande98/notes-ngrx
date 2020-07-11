@@ -104,7 +104,7 @@ const getNotes = (state, action) => {
     // action creator to return the pure state
     return HelperService.updateObject(state, {
         notes: notes ? notes : [],
-        originalNotes: notes,
+        originalNotes: notes ? notes : [],
         selectedNote: null,
         lastUpdate: new Date()
     });
